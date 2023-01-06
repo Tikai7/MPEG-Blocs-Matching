@@ -1,36 +1,21 @@
-import cv2
 import time
-import numpy as np
+
 from Search import Search
+from Restore import Restore
 from Preprocessing import Preprocessing
 from tqdm import tqdm
 
 
 class Find:
-    @staticmethod
-    def show_similarities(image, list_of_blocs, bs):
-        for x, y in list_of_blocs:
-            cv2.rectangle(image, (y, x, bs, bs), (0, 0, 255), 2)
-
-        cv2.imshow("similarities_between_images", image)
-        cv2.waitKey(15000)
-
-    @staticmethod
-    def show_residues(image2, list_of_blocs, bs):
-        residue_image = np.copy(image2)
-        for x, y in list_of_blocs:
-            residue_image[x:x+bs, y:y+bs] = 0
-
-        cv2.imshow("residues_between_images", residue_image)
-        cv2.waitKey(15000)
 
     @staticmethod
     def with_sliding(im1, im2, threshold=50, dx=7, dy=7, bs=16, DELTA=64):
 
         print("[Preprocessing]...")
-        image1, image2 = Preprocessing.process_both(im1, im2, DELTA)
+        image1, image2 = Preprocessing.process_both(
+            im1, im2, DELTA, padding=True)
         list_of_blocs = []
-        x1, y1 = image1.shape
+        x1, y1 = image2.shape
 
         print("[Searching]...")
         start = time.time()
@@ -45,14 +30,23 @@ class Find:
                 y = y_sz+y
 
                 if min_mse < threshold:
-                    list_of_blocs.append((x, y))
+                    list_of_blocs.append((x, y, i, j))
         end = time.time()
 
         print(f"[Result] in {end-start}s")
-        print(f"[Preparing] image residues and similarities ...")
 
-        Find.show_similarities(im1, list_of_blocs, bs)
-        Find.show_residues(im2, list_of_blocs, bs)
+        print(f"[Preparing] image similarities ...")
+        Restore.show_similarities(im1.copy(), list_of_blocs, bs, mode="lin")
+        print(f"[Done]")
+
+        print(f"[Preparing] image residues ...")
+        residue_image = Restore.show_residues(
+            im2, list_of_blocs, bs, mode="lin")
+        print(f"[Done]")
+
+        print(f"[Preparing] image predicted ...")
+        Restore.show_predictions(im1, residue_image,
+                                 list_of_blocs, bs, mode="lin")
 
         print(f"[Finish]")
 
@@ -60,9 +54,10 @@ class Find:
     def with_dichotomic(im1, im2, threshold=50, bs=16, DELTA=64):
 
         print("[Preprocessing]...")
-        image1, image2 = Preprocessing.process_both(im1, im2, DELTA)
+        image1, image2 = Preprocessing.process_both(
+            im1, im2, DELTA, padding=True)
         list_of_blocs = []
-        x1, y1 = image1.shape
+        x1, y1 = image2.shape
 
         print("[Searching]...")
         start = time.time()
@@ -71,13 +66,22 @@ class Find:
                 _, x, y, min_mse = Search.dichotomique_search(
                     image2, image1, i, j, i+bs, j+bs, bs, DELTA)
                 if min_mse < threshold:
-                    list_of_blocs.append((x, y))
+                    list_of_blocs.append((x-DELTA, y-DELTA, i, j))
         end = time.time()
 
         print(f"[Result] in {end-start}s")
-        print(f"[Preparing] image residues and similarities ...")
 
-        Find.show_similarities(im1, list_of_blocs, bs)
-        Find.show_residues(im2, list_of_blocs, bs)
+        print(f"[Preparing] image similarities ...")
+        Restore.show_similarities(im1.copy(), list_of_blocs, bs, mode="log")
+        print(f"[Done]")
+
+        print(f"[Preparing] image residues ...")
+        residue_image = Restore.show_residues(
+            im2, list_of_blocs, bs, mode="log")
+        print(f"[Done]")
+
+        print(f"[Preparing] image predicted ...")
+        Restore.show_predictions(im1, residue_image,
+                                 list_of_blocs, bs, mode="log")
 
         print(f"[Finish]")

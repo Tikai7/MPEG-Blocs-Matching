@@ -11,11 +11,14 @@ class Search:
         step = 32
         min_mse = inf
 
-        coord_x = x
-        coord_y = y
+        coord_x = x+DELTA
+        coord_y = y+DELTA
+
+        min_x = coord_x
+        min_y = coord_y
 
         TARGET_BLOC = target_image[x:x2, y:y2]
-        min_bloc = TARGET_BLOC
+        min_bloc = None
 
         while step >= 1:
             MOUVEMENTS = [(0, 0), (step, 0), (-step, 0), (0, step), (-step, 0),
@@ -52,7 +55,8 @@ class Search:
         new_x, new_y = x-DX, y-DY
         new_x2, new_y2 = x2+DX, y2+DY
 
-        search_zone = searching_image[new_x:new_x2, new_y:new_y2]
+        search_zone = searching_image[new_x +
+                                      DELTA:new_x2+DELTA, new_y+DELTA:new_y2+DELTA]
 
         min_mse = inf
         min_bloc = None

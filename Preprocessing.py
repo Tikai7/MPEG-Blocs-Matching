@@ -14,7 +14,7 @@ class Preprocessing:
         return grayImg1, grayImg2
 
     @staticmethod
-    def add_padding(image, DELTA):
+    def add_padding(image, DELTA=64):
         image_with_padding = cv2.copyMakeBorder(
             image,
             DELTA,
