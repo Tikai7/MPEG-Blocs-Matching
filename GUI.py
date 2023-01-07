@@ -11,6 +11,10 @@ algorithm = {
     2: Find.with_dichotomic,
 }
 
+default_bloc = 8
+default_padding = 0
+default_dxdy = 5
+defautl_thresh = 1
 
 selected = False
 img1 = []
@@ -47,10 +51,12 @@ def show_image():
         img2 = cv2.imread(fln)
         label_image_two.configure(image=img)
         label_image_two.image = img
+        cv2.imwrite(f"./backup/second_image.loaded.jpg", img2)
     else:
         img1 = cv2.imread(fln)
         label_image.configure(image=img)
         label_image.image = img
+        cv2.imwrite(f"./backup/first_image.loaded.jpg", img1)
 
     selected = True
 
@@ -58,20 +64,20 @@ def show_image():
 # ---------------------------- FENETRE
 window = Tk.Tk()
 window.title("MPEG Encoder")
-window.geometry("900x800")
-window.minsize(800, 600)
+window.geometry("900x900")
+window.minsize(900, 900)
 
 
 thresh_value = Tk.IntVar()
-thresh_value.set(1)
+thresh_value.set(defautl_thresh)
 search_value = Tk.IntVar()
 search_value.set(1)
 padding_value = Tk.IntVar()
-padding_value.set(0)
+padding_value.set(default_padding)
 dxdy_value = Tk.IntVar()
-dxdy_value.set(5)
+dxdy_value.set(default_dxdy)
 bloc_value = Tk.IntVar()
-bloc_value.set(8)
+bloc_value.set(default_bloc)
 
 # ---------------------------- CADRE
 image_frame = Tk.LabelFrame(
@@ -85,11 +91,6 @@ option_frame = Tk.LabelFrame(
 
 button_frame = Tk.Frame(window, width=750, height=200, borderwidth=1)
 
-# ---------------------------- IMAGES
-
-image_one = Tk.PhotoImage(file="images\Image072.png")
-image_two = Tk.PhotoImage(file="images\Image092.png")
-
 # ---------------------------- LABEL
 label_welcome = Tk.Label(window, text="Bienvenue sur MPEG Encoder")
 label_image = Tk.Label(image_frame)
@@ -101,13 +102,13 @@ label_deltaXY = Tk.Label(
     option_frame, text="Vecteur dx/dy : ")
 
 # ---------------------------- SCALE
-range_thresh = Tk.Scale(option_frame, from_=1, to=100,
+range_thresh = Tk.Scale(option_frame, from_=defautl_thresh, to=100,
                         tickinterval=10, orient="horizontal", length=300, variable=thresh_value)
-range_padding = Tk.Scale(option_frame, from_=0, to=128,
+range_padding = Tk.Scale(option_frame, from_=default_padding, to=128,
                          tickinterval=16, orient="horizontal", length=300, variable=padding_value)
-range_block = Tk.Scale(option_frame, from_=8, to=512,
-                       tickinterval=64, orient="horizontal", length=300, variable=bloc_value)
-range_deltaXY = Tk.Scale(option_frame, from_=5, to=15,
+range_block = Tk.Scale(option_frame, from_=default_bloc, to=64,
+                       tickinterval=8, orient="horizontal", length=300, variable=bloc_value)
+range_deltaXY = Tk.Scale(option_frame, from_=default_dxdy, to=15,
                          tickinterval=1, orient="horizontal", length=300, variable=dxdy_value)
 
 
