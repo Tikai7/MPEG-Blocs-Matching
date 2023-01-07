@@ -6,7 +6,7 @@ from math import inf
 class Search:
 
     @staticmethod
-    def dichotomique_search(target_image, searching_image, x, y, x2, y2, BS=16, DELTA=64) -> np.ndarray:
+    def dichotomique_search(target_bloc, searching_image, x, y, BS=16, DELTA=64) -> np.ndarray:
 
         step = 32
         min_mse = inf
@@ -17,7 +17,6 @@ class Search:
         min_x = coord_x
         min_y = coord_y
 
-        TARGET_BLOC = target_image[x:x2, y:y2]
         min_bloc = None
 
         while step >= 1:
@@ -30,8 +29,8 @@ class Search:
                 coord_y += m
                 current_bloc = searching_image[coord_x:coord_x +
                                                BS, coord_y:coord_y+BS]
-                if TARGET_BLOC.shape == current_bloc.shape:
-                    temp_mse = Error.MSE(TARGET_BLOC, current_bloc)
+                if target_bloc.shape == current_bloc.shape:
+                    temp_mse = Error.MSE(target_bloc, current_bloc)
                     if temp_mse < min_mse:
                         min_mse = temp_mse
                         min_x = coord_x
@@ -46,10 +45,9 @@ class Search:
         return min_bloc, min_x, min_y, min_mse
 
     @staticmethod
-    def sliding_search(target_image, searching_image, x, y, x2, y2, dx=7, dy=7, BS=16, DELTA=64) -> np.ndarray:
+    def sliding_search(target_bloc, searching_image, x, y, x2, y2, dx=7, dy=7, BS=16, DELTA=64) -> np.ndarray:
 
         WIDTH, HEIGHT = BS, BS
-        TARGET_BLOC = target_image[x:x2, y:y2]
         DX, DY = dx, dy
 
         new_x, new_y = x-DX, y-DY
@@ -67,8 +65,8 @@ class Search:
         for n in range(search_zone.shape[0]):
             for m in range(search_zone.shape[1]):
                 current_bloc = search_zone[n:n+HEIGHT, m:m+WIDTH]
-                if current_bloc.shape == TARGET_BLOC.shape:
-                    temp_mse = Error.MSE(TARGET_BLOC, current_bloc)
+                if current_bloc.shape == target_bloc.shape:
+                    temp_mse = Error.MSE(target_bloc, current_bloc)
                     if min_mse > temp_mse:
                         min_mse = temp_mse
                         x_b2 = n

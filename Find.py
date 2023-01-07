@@ -21,16 +21,18 @@ class Find:
         start = time.time()
         for i in tqdm(range(0, x1, bs)):
             for j in range(0, y1, bs):
-                _, _, x, y, min_mse = Search.sliding_search(
-                    image2, image1, i, j, i+bs, j+bs, dx, dy, bs, DELTA)
+                target_bloc = image2[i:i+bs, j:j+bs]
+                if target_bloc.shape == (bs, bs):
+                    _, _, x, y, min_mse = Search.sliding_search(
+                        target_bloc, image1, i, j, i+bs, j+bs, dx, dy, bs, DELTA)
 
-                x_sz, y_sz = i-dx, j-dy
+                    x_sz, y_sz = i-dx, j-dy
 
-                x = x_sz+x
-                y = y_sz+y
+                    x = x_sz+x
+                    y = y_sz+y
 
-                if min_mse < threshold:
-                    list_of_blocs.append((x, y, i, j))
+                    if min_mse < threshold:
+                        list_of_blocs.append((x, y, i, j))
         end = time.time()
 
         print(f"[Result] in {end-start}s")
@@ -63,10 +65,13 @@ class Find:
         start = time.time()
         for i in tqdm(range(0, x1, bs)):
             for j in range(0, y1, bs):
-                _, x, y, min_mse = Search.dichotomique_search(
-                    image2, image1, i, j, i+bs, j+bs, bs, DELTA)
-                if min_mse < threshold:
-                    list_of_blocs.append((x-DELTA, y-DELTA, i, j))
+                target_bloc = image2[i:i+bs, j:j+bs]
+                if target_bloc.shape == (bs, bs):
+                    _, x, y, min_mse = Search.dichotomique_search(
+                        target_bloc, image1, i, j, bs, DELTA)
+                    if min_mse < threshold:
+                        list_of_blocs.append((x-DELTA, y-DELTA, i, j))
+
         end = time.time()
 
         print(f"[Result] in {end-start}s")
