@@ -22,16 +22,13 @@ def error_modal():
 
 
 def compress():
-    if thresh_value.get() > 0 and search_value.get() > 0 and padding_value.get() > -1 and bloc_value.get() > 8 and len(img1) > 0 and len(img2) > 0:
-        if search_frame.get() == 2:
+    if len(img1) > 0 and len(img2) > 0 and img1.shape == img2.shape:
+        if search_value.get() == 2:
             Find.with_dichotomic(img1, img2, thresh_value.get(
             ), bs=bloc_value.get(), DELTA=padding_value.get())
-        elif search_value.get() == 1 and dxdy_value.get() > 4:
+        else:
             Find.with_sliding(img1, img2, thresh_value.get(), dx=dxdy_value.get(
             ), dy=dxdy_value.get(), bs=bloc_value.get(), DELTA=padding_value.get())
-        else:
-            error_modal()
-
     else:
         error_modal()
 
@@ -66,12 +63,15 @@ window.minsize(800, 600)
 
 
 thresh_value = Tk.IntVar()
+thresh_value.set(1)
 search_value = Tk.IntVar()
 search_value.set(1)
 padding_value = Tk.IntVar()
+padding_value.set(0)
 dxdy_value = Tk.IntVar()
+dxdy_value.set(5)
 bloc_value = Tk.IntVar()
-
+bloc_value.set(8)
 
 # ---------------------------- CADRE
 image_frame = Tk.LabelFrame(
