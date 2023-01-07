@@ -130,8 +130,8 @@ button_browse = Tk.Button(image_frame, text="Parcourir",
 label_welcome.pack()
 image_frame.pack(padx=20, pady=20, fill="x")
 button_browse.pack(side="top")
-label_image.pack(side="left", padx=70, pady=20)
-label_image_two.pack(side="right", padx=70, pady=20)
+label_image.pack(side="left", padx=60, pady=20)
+label_image_two.pack(side="right", padx=60, pady=20)
 
 search_frame.pack(padx=20, pady=20, fill="x")
 radio_slide.pack()
