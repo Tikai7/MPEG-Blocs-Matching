@@ -40,6 +40,9 @@ class Search:
                 coord_x -= n
                 coord_y -= m
 
+            coord_x = min_x
+            coord_y = min_y
+
             step //= 2
 
         return min_bloc, min_x, min_y, min_mse
