@@ -43,11 +43,12 @@ class Find:
         print(f"[Result] in {end-start}s")
 
         print(f"[Preparing] image similarities ...")
-        Restore.show_similarities(im1.copy(), list_of_blocs, bs, mode="lin")
+        Restore.show_similarities(
+            im1.copy(), im2.copy(), list_of_residu, bs, mode="lin")
         print(f"[Done]")
 
         print(f"[Preparing] image residues ...")
-        residu_image, fake_residue = Restore.show_residues(
+        _, fake_residue = Restore.show_residues(
             im2, im1, list_of_blocs, list_of_residu, bs, mode="lin")
         print(f"[Done]")
 
@@ -86,11 +87,11 @@ class Find:
 
         print(f"[Preparing] image similarities ...")
         Restore.show_similarities(
-            im1.copy(), im2.copy(), list_of_blocs, bs, mode="log")
+            im1.copy(), im2.copy(), list_of_residu, bs, mode="log")
         print(f"[Done]")
 
         print(f"[Preparing] image residues ...")
-        residu_image, fake_residue = Restore.show_residues(
+        _, fake_residue = Restore.show_residues(
             im2, im1, list_of_blocs, list_of_residu, bs, mode="log")
         print(f"[Done]")
 
