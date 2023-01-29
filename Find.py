@@ -47,12 +47,12 @@ class Find:
         print(f"[Done]")
 
         print(f"[Preparing] image residues ...")
-        residue_image = Restore.show_residues(
+        residu_image, fake_residue = Restore.show_residues(
             im2, im1, list_of_blocs, list_of_residu, bs, mode="lin")
         print(f"[Done]")
 
         print(f"[Preparing] image predicted ...")
-        Restore.show_predictions(im1, residue_image,
+        Restore.show_predictions(im1, fake_residue,
                                  list_of_blocs, bs, mode="lin")
 
         print(f"[Finish]")
@@ -90,12 +90,12 @@ class Find:
         print(f"[Done]")
 
         print(f"[Preparing] image residues ...")
-        residue_image = Restore.show_residues(
+        residu_image, fake_residue = Restore.show_residues(
             im2, im1, list_of_blocs, list_of_residu, bs, mode="log")
         print(f"[Done]")
 
         print(f"[Preparing] image predicted ...")
-        Restore.show_predictions(im1, residue_image,
+        Restore.show_predictions(im1, fake_residue,
                                  list_of_blocs, bs, mode="log")
 
         print(f"[Finish]")

@@ -41,13 +41,18 @@ class Restore:
             # random_color = (random.randint(0, 255), random.randint(
             #     0, 255), random.randint(0, 255))
 
-            random_color = (0, 0, 255)
-            cv2.rectangle(image, (y, x, bs, bs), random_color, 2)
-            # cv2.rectangle(image2, (j, i, bs, bs), random_color, 2)
+            color_one = (0, 0, 255)
+            color_two = (255, 0, 0)
 
-        cv2.imwrite(f"{filename}.{mode}.jpg", image)
-        # cv2.imwrite(f"{filename}_2.{mode}.jpg", image2)
-        cv2.imshow("similarities_between_images", image)
+            cv2.rectangle(image, (y, x, bs, bs), color_one, 2)
+            cv2.rectangle(image2, (j, i, bs, bs), color_two, 2)
+
+        cv2.imwrite(f"{filename}_1.{mode}.jpg", image)
+        cv2.imwrite(f"{filename}_2.{mode}.jpg", image2)
+
+        cv2.imshow("similarities_between_images_1_2", image)
+        cv2.imshow("similarities_between_images_2_1", image2)
+
         cv2.waitKey(TIME)
         return image
 
@@ -59,6 +64,8 @@ class Restore:
         for _, _, x, y in tqdm(list_of_blocs):
             residue_image[x:x+bs, y:y+bs] = 0
 
+        working_residue = residue_image.copy()
+
         for _, _, x, y in tqdm(list_of_residu):
             residue_image[x:x+bs, y:y+bs] = abs(image1[x:x +
                                                        bs, y:y+bs]-image2[x:x+bs, y:y+bs])
@@ -66,4 +73,4 @@ class Restore:
         cv2.imwrite(f"{filename}.{mode}.jpg", residue_image)
         cv2.imshow("residues_between_images", residue_image)
         cv2.waitKey(TIME)
-        return residue_image
+        return residue_image, working_residue
