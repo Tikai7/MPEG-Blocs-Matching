@@ -59,9 +59,9 @@ class Restore:
         for _, _, x, y in tqdm(list_of_blocs):
             residue_image[x:x+bs, y:y+bs] = 0
 
-        # for _, _, x, y in tqdm(list_of_residu):
-        #     residue_image[x:x+bs, y:y+bs] = abs(image1[x:x +
-        #                                                bs, y:y+bs]-image2[x:x+bs, y:y+bs])
+        for _, _, x, y in tqdm(list_of_residu):
+            residue_image[x:x+bs, y:y+bs] = abs(image1[x:x +
+                                                       bs, y:y+bs]-image2[x:x+bs, y:y+bs])
 
         cv2.imwrite(f"{filename}.{mode}.jpg", residue_image)
         cv2.imshow("residues_between_images", residue_image)
