@@ -1,4 +1,5 @@
 import cv2
+import random
 import numpy as np
 from tqdm import tqdm
 
@@ -34,22 +35,33 @@ class Restore:
         cv2.waitKey(TIME)
 
     @staticmethod
-    def show_similarities(image, list_of_blocs, bs, mode):
+    def show_similarities(image, image2, list_of_blocs, bs, mode):
         filename = "./out/similarities_image"
-        for x, y, _, _ in tqdm(list_of_blocs):
-            cv2.rectangle(image, (y, x, bs, bs), (0, 0, 255), 2)
+        for x, y, i, j in tqdm(list_of_blocs):
+            # random_color = (random.randint(0, 255), random.randint(
+            #     0, 255), random.randint(0, 255))
+
+            random_color = (0, 0, 255)
+            cv2.rectangle(image, (y, x, bs, bs), random_color, 2)
+            # cv2.rectangle(image2, (j, i, bs, bs), random_color, 2)
 
         cv2.imwrite(f"{filename}.{mode}.jpg", image)
+        # cv2.imwrite(f"{filename}_2.{mode}.jpg", image2)
         cv2.imshow("similarities_between_images", image)
         cv2.waitKey(TIME)
         return image
 
     @staticmethod
-    def show_residues(image2, list_of_blocs, bs, mode):
+    def show_residues(image2, image1, list_of_blocs, list_of_residu, bs, mode):
         filename = "./out/residues_image"
         residue_image = np.copy(image2)
+
         for _, _, x, y in tqdm(list_of_blocs):
             residue_image[x:x+bs, y:y+bs] = 0
+
+        # for _, _, x, y in tqdm(list_of_residu):
+        #     residue_image[x:x+bs, y:y+bs] = abs(image1[x:x +
+        #                                                bs, y:y+bs]-image2[x:x+bs, y:y+bs])
 
         cv2.imwrite(f"{filename}.{mode}.jpg", residue_image)
         cv2.imshow("residues_between_images", residue_image)

@@ -15,6 +15,8 @@ class Find:
         image1, image2 = Preprocessing.process_both(
             im1, im2, DELTA, padding=True)
         list_of_blocs = []
+        list_of_residu = []
+
         x1, y1 = image2.shape
 
         print("[Searching]...")
@@ -33,6 +35,9 @@ class Find:
 
                     if min_mse < threshold:
                         list_of_blocs.append((x, y, i, j))
+                    else:
+                        list_of_residu.append((x, y, i, j))
+
         end = time.time()
 
         print(f"[Result] in {end-start}s")
@@ -43,7 +48,7 @@ class Find:
 
         print(f"[Preparing] image residues ...")
         residue_image = Restore.show_residues(
-            im2, list_of_blocs, bs, mode="lin")
+            im2, im1, list_of_blocs, list_of_residu, bs, mode="lin")
         print(f"[Done]")
 
         print(f"[Preparing] image predicted ...")
@@ -59,6 +64,7 @@ class Find:
         image1, image2 = Preprocessing.process_both(
             im1, im2, DELTA, padding=True)
         list_of_blocs = []
+        list_of_residu = []
         x1, y1 = image2.shape
 
         print("[Searching]...")
@@ -71,18 +77,21 @@ class Find:
                         target_bloc, image1, i, j, bs, DELTA)
                     if min_mse < threshold:
                         list_of_blocs.append((x-DELTA, y-DELTA, i, j))
+                    else:
+                        list_of_residu.append((x-DELTA, y-DELTA, i, j))
 
         end = time.time()
 
         print(f"[Result] in {end-start}s")
 
         print(f"[Preparing] image similarities ...")
-        Restore.show_similarities(im1.copy(), list_of_blocs, bs, mode="log")
+        Restore.show_similarities(
+            im1.copy(), im2.copy(), list_of_blocs, bs, mode="log")
         print(f"[Done]")
 
         print(f"[Preparing] image residues ...")
         residue_image = Restore.show_residues(
-            im2, list_of_blocs, bs, mode="log")
+            im2, im1, list_of_blocs, list_of_residu, bs, mode="log")
         print(f"[Done]")
 
         print(f"[Preparing] image predicted ...")
