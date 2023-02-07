@@ -3,9 +3,10 @@ This is an MPEG block matching algorithm.
 
 # How it works
 - Launch the GUI.py file 
-- Add two pictures
+- Add two frames
 - Chose a search algorithm (Linear or Logarithmic)
 - Press "compress"
+
 ![Project](https://user-images.githubusercontent.com/68500496/217188738-34bb7cc1-00cb-4eab-b22e-f7fb2cee16c6.JPG)
 
 
